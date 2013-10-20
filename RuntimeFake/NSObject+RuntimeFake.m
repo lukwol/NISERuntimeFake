@@ -13,8 +13,8 @@
     return [[class alloc] init];
 }
 
-+ (id)fakeDelegate:(Protocol *)protocol {
-    NSString *className = [NSString stringWithFormat:@"Fake%@", NSStringFromProtocol(protocol)];
++ (id)fakeDelegate:(Protocol *)protocol withOptionalMethods:(BOOL)optional{
+NSString *className = [NSString stringWithFormat:@"Fake%@", NSStringFromProtocol(protocol)];
     Class class = objc_allocateClassPair(self.class, [className cStringUsingEncoding:NSUTF8StringEncoding], 0);
     class_addProtocol(class, protocol);
     void (^enumerate)(BOOL) = ^(BOOL isRequired) {
@@ -29,7 +29,9 @@
         }
     };
     enumerate(YES);
-    enumerate(NO);
+    if(optional){
+        enumerate(NO);
+    }
     return [[class alloc] init];
 }
 
