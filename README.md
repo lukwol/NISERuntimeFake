@@ -36,7 +36,7 @@ Example:
       return @[@"New implementation", string];
     }];
     
-    //Use your fake object as you would normally use normal object
+    //Use your fake object as you would normally use a real object
     [fakeObject doSomethingWithStringAndReturnArray:@"Whatever"];
     
     //If you want to make new fake object with original implementation just create new one 
