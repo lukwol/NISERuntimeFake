@@ -3,9 +3,9 @@
 //
 
 #import <objc/runtime.h>
-#import "NSObject+RuntimeFake.h"
+#import "NSObject+NISERuntimeFake.h"
 
-@implementation NSObject (RuntimeFake)
+@implementation NSObject (NISERuntimeFake)
 
 + (id)fake {
     NSString *className = [NSString stringWithFormat:@"Fake%@", NSStringFromClass([self class])];
@@ -13,8 +13,8 @@
     return [[class alloc] init];
 }
 
-+ (id)fakeDelegate:(Protocol *)protocol withOptionalMethods:(BOOL)optional{
-NSString *className = [NSString stringWithFormat:@"Fake%@", NSStringFromProtocol(protocol)];
++ (id)fakeDelegate:(Protocol *)protocol withOptionalMethods:(BOOL)optional {
+    NSString *className = [NSString stringWithFormat:@"Fake%@", NSStringFromProtocol(protocol)];
     Class class = objc_allocateClassPair(self.class, [className cStringUsingEncoding:NSUTF8StringEncoding], 0);
     class_addProtocol(class, protocol);
     void (^enumerate)(BOOL) = ^(BOOL isRequired) {
@@ -29,7 +29,7 @@ NSString *className = [NSString stringWithFormat:@"Fake%@", NSStringFromProtocol
         }
     };
     enumerate(YES);
-    if(optional){
+    if (optional) {
         enumerate(NO);
     }
     return [[class alloc] init];

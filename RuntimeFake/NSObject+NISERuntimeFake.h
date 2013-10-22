@@ -4,7 +4,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSObject (RuntimeFake)
+@interface NSObject (NISERuntimeFake)
 
 + (id)fake;
 
