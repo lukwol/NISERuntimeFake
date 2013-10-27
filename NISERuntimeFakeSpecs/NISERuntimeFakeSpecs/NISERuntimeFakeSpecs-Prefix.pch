@@ -1,5 +1,5 @@
 //
-// Prefix header for all source files of the 'RuntimeFakeSpecs' target in the 'RuntimeFakeSpecs' project
+// Prefix header for all source files of the 'NISERuntimeFakeSpecs' target in the 'NISERuntimeFakeSpecs' project
 //
 
 #ifdef __OBJC__
