@@ -13,6 +13,12 @@
     return [[class alloc] init];
 }
 
++ (Class)fakeClass{
+    NSString *className = [NSString stringWithFormat:@"Fake%@", NSStringFromClass([self class])];
+    Class class = objc_allocateClassPair(self.class, [className cStringUsingEncoding:NSUTF8StringEncoding], 0);
+    return class;
+}
+
 + (id)fakeDelegate:(Protocol *)protocol withOptionalMethods:(BOOL)optional {
     NSString *className = [NSString stringWithFormat:@"Fake%@", NSStringFromProtocol(protocol)];
     Class class = objc_allocateClassPair(self.class, [className cStringUsingEncoding:NSUTF8StringEncoding], 0);

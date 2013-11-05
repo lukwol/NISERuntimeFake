@@ -30,6 +30,25 @@ describe(@"NISERuntimeFake", ^{
         });
 
     });
+    
+    describe(@"fake class creation", ^{
+        
+        __block Class fakeClass;
+        
+        subjectAction(^{
+            fakeClass = [NSObject fakeClass];
+        });
+        
+        it(@"should create FakeNSObject class", ^{
+            NSStringFromClass(fakeClass) should equal(@"FakeNSObject");
+        });
+        
+        it(@"should not register created fake class", ^{
+            Class expectedClass = NSClassFromString(@"FakeNSObject");
+            expectedClass should be_nil;
+        });
+        
+    });
 
     describe(@"overriding instance method", ^{
 
