@@ -54,5 +54,16 @@ Fake class Example:
     //Create fake class
     Class fakeClass = [YourClass fakeClass];
     
+    //Override instance methods for all future objects of this class
+    [fakeClass overrideInstanceMethod:@selector(doSomethingWithStringAndReturnArray:) withImplementation:^NSArray *(YourClass *_self, NSString *string){
+      [_self makeCoffee];
+      return @[@"New implementation", string];
+    }];
+    
+    //Create fake object with any method you want using previously created fake class
+    YourClass *fake = [[fakeClass alloc] initWithDevice:[UIDevice currentDevice]];
+    
+    //Use your fake object as you would normally use a real object
+    [fakeObject doSomethingWithStringAndReturnArray:@"Whatever"];
 
 
