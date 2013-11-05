@@ -8,9 +8,8 @@
 @implementation NSObject (NISERuntimeFake)
 
 + (id)fake {
-    NSString *className = [NSString stringWithFormat:@"Fake%@", NSStringFromClass([self class])];
-    Class class = objc_allocateClassPair(self.class, [className cStringUsingEncoding:NSUTF8StringEncoding], 0);
-    return [[class alloc] init];
+    Class fakeClass = [self fakeClass];
+    return [[fakeClass alloc] init];
 }
 
 + (Class)fakeClass{
