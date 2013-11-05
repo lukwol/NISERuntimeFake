@@ -8,6 +8,8 @@
 
 + (id)fake;
 
++ (Class)fakeClass;
+
 + (id)fakeDelegate:(Protocol *)protocol withOptionalMethods:(BOOL)optional;
 
 - (void)overrideInstanceMethod:(SEL)selector withImplementation:(id)block;
