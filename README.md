@@ -48,5 +48,11 @@ Fake delegate Example:
     //Create fake delegate with empty implementation of protocol's method
     YourClass *fakeDelegate = [YourClass fakeDelegate:@protocol(ExampleDelegate) withOptionalMethods:YES];
     
+Fake class Example:
+-
+
+    //Create fake class
+    Class fakeClass = [YourClass fakeClass];
+    
 
 
