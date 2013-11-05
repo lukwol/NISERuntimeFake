@@ -1,3 +1,4 @@
 platform :ios, '6.0'
 
 pod 'Cedar', '~> 0.9.3'
+pod 'NISERuntimeFake', '~> 0.0.2'
