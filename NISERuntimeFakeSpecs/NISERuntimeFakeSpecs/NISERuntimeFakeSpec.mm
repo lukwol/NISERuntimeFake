@@ -50,6 +50,58 @@ describe(@"NISERuntimeFake", ^{
         
     });
 
+    describe(@"fake delegate object creation", ^{
+
+        __block BOOL optional;
+        __block NSObject <UITableViewDataSource> *fakeDelegate;
+
+        subjectAction(^{
+            fakeDelegate = [NSObject fakeDelegate:@protocol(UITableViewDataSource) withOptionalMethods:optional];
+        });
+
+        it(@"should create FakeUITableViewDelegate class object", ^{
+            NSStringFromClass([fakeDelegate class]) should equal(@"FakeUITableViewDataSource");
+        });
+
+        it(@"should not register created fake class", ^{
+            Class expectedClass = NSClassFromString(@"FakeUITableViewDataSource");
+            expectedClass should be_nil;
+        });
+
+        it(@"should conform to protocol ", ^{
+            [fakeDelegate conformsToProtocol:@protocol(UITableViewDataSource)] should be_truthy;
+        });
+
+        it(@"should implement required method", ^{
+            [fakeDelegate respondsToSelector:@selector(tableView:numberOfRowsInSection:)] should be_truthy;
+        });
+
+        context(@"when user choose to implement optional methods", ^{
+
+            beforeEach(^{
+                optional = YES;
+            });
+
+            it(@"should implement optional method", ^{
+                [fakeDelegate respondsToSelector:@selector(numberOfSectionsInTableView:)] should be_truthy;
+            });
+
+        });
+
+        context(@"when user choose not to implement optional methods", ^{
+
+            beforeEach(^{
+                optional = NO;
+            });
+
+            it(@"should not implement optional method", ^{
+                [fakeDelegate respondsToSelector:@selector(numberOfSectionsInTableView:)] should_not be_truthy;
+            });
+
+        });
+
+    });
+
     describe(@"overriding instance method", ^{
 
         __block IMP previousImplementation;
@@ -139,58 +191,6 @@ describe(@"NISERuntimeFake", ^{
 
         it(@"should return 42", ^{
             count should equal(42);
-        });
-
-    });
-
-    describe(@"fake delegate object creation", ^{
-
-        __block BOOL optional;
-        __block NSObject <UITableViewDataSource> *fakeDelegate;
-
-        subjectAction(^{
-            fakeDelegate = [NSObject fakeDelegate:@protocol(UITableViewDataSource) withOptionalMethods:optional];
-        });
-
-        it(@"should create FakeUITableViewDelegate class object", ^{
-            NSStringFromClass([fakeDelegate class]) should equal(@"FakeUITableViewDataSource");
-        });
-
-        it(@"should not register created fake class", ^{
-            Class expectedClass = NSClassFromString(@"FakeUITableViewDataSource");
-            expectedClass should be_nil;
-        });
-
-        it(@"should conform to protocol ", ^{
-            [fakeDelegate conformsToProtocol:@protocol(UITableViewDataSource)] should be_truthy;
-        });
-
-        it(@"should implement required method", ^{
-            [fakeDelegate respondsToSelector:@selector(tableView:numberOfRowsInSection:)] should be_truthy;
-        });
-
-        context(@"when user choose to implement optional methods", ^{
-
-            beforeEach(^{
-                optional = YES;
-            });
-
-            it(@"should implement optional method", ^{
-                [fakeDelegate respondsToSelector:@selector(numberOfSectionsInTableView:)] should be_truthy;
-            });
-
-        });
-
-        context(@"when user choose not to implement optional methods", ^{
-
-            beforeEach(^{
-                optional = NO;
-            });
-
-            it(@"should not implement optional method", ^{
-                [fakeDelegate respondsToSelector:@selector(numberOfSectionsInTableView:)] should_not be_truthy;
-            });
-
         });
 
     });
