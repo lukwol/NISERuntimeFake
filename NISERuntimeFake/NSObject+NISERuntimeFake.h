@@ -10,7 +10,7 @@
 
 + (Class)fakeClass;
 
-+ (id)fakeDelegate:(Protocol *)protocol withOptionalMethods:(BOOL)optional;
++ (id)fakeObjectWithProtocol:(Protocol *)protocol optionalMethods:(BOOL)optional;
 
 - (void)overrideInstanceMethod:(SEL)selector withImplementation:(id)block;
 

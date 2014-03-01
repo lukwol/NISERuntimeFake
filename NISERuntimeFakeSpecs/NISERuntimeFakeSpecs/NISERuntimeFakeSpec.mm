@@ -14,6 +14,10 @@ describe(@"NISERuntimeFake", ^{
         fake = [NSObject fake];
     });
 
+    afterEach(^{
+        fake = nil;
+    });
+
     describe(@"fake object creation", ^{
 
         subjectAction(^{
@@ -125,10 +129,10 @@ describe(@"NISERuntimeFake", ^{
         
     });
 
-    describe(@"catching parameter", ^{
+    describe(@"capturing parameter", ^{
 
         __block NSObject *passedObject;
-        __block NSObject *catchedObject;
+        __block NSObject *capturedObject;
 
         beforeEach(^{
             passedObject = [[NSObject alloc] init];
@@ -136,21 +140,21 @@ describe(@"NISERuntimeFake", ^{
 
         subjectAction(^{
             [fake overrideInstanceMethod:@selector(performSelector:withObject:) withImplementation:^id(NSObject *_self, SEL selector, id object) {
-                catchedObject = object;
+                capturedObject = object;
                 return nil;
             }];
             [fake performSelector:nil withObject:passedObject];
         });
 
         it(@"should return passed object", ^{
-            catchedObject should equal(passedObject);
+            capturedObject should equal(passedObject);
         });
 
     });
 
-    describe(@"catching property", ^{
+    describe(@"capturing property", ^{
 
-        __block NSURL *catchedURL;
+        __block NSURL *capturedURL;
         __block NSURL *initialURL;
         __block Class fakeClass;
 
@@ -160,7 +164,7 @@ describe(@"NISERuntimeFake", ^{
 
         subjectAction(^{
             [fakeClass overrideInstanceMethod:@selector(start) withImplementation:^void(NSURLConnection *_self) {
-                catchedURL = [[_self currentRequest] URL];
+                capturedURL = [[_self currentRequest] URL];
             }];
             initialURL = [[NSURL alloc] initWithString:@"http://FixtureURL.com"];
             NSURLRequest *URLRequest = [NSURLRequest requestWithURL:initialURL];
@@ -168,12 +172,12 @@ describe(@"NISERuntimeFake", ^{
         });
 
         it(@"should get initial url", ^{
-            catchedURL should equal(initialURL);
+            capturedURL should equal(initialURL);
         });
 
     });
 
-    describe(@"returning different object", ^{
+    describe(@"returning different value", ^{
 
         __block NSArray *fakeArray;
         __block NSUInteger count;

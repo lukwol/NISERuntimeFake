@@ -12,14 +12,19 @@
     return [[fakeClass alloc] init];
 }
 
-+ (Class)fakeClass{
-    NSString *className = [NSString stringWithFormat:@"Fake%@", NSStringFromClass([self class])];
++ (Class)fakeClass {
+
+    NSString *className = [NSString stringWithFormat:@"NISEFake%@", NSStringFromClass([self class])];
+    [self assertClassNotExists:NSClassFromString(className)];
+
     Class class = objc_allocateClassPair(self.class, [className cStringUsingEncoding:NSUTF8StringEncoding], 0);
     return class;
 }
 
-+ (id)fakeDelegate:(Protocol *)protocol withOptionalMethods:(BOOL)optional {
-    NSString *className = [NSString stringWithFormat:@"Fake%@", NSStringFromProtocol(protocol)];
++ (id)fakeObjectWithProtocol:(Protocol *)protocol optionalMethods:(BOOL)optional {
+    NSString *className = [NSString stringWithFormat:@"NISEFake%@", NSStringFromProtocol(protocol)];
+    [self assertClassNotExists:NSClassFromString(className)];
+
     Class class = objc_allocateClassPair(self.class, [className cStringUsingEncoding:NSUTF8StringEncoding], 0);
     class_addProtocol(class, protocol);
     void (^enumerate)(BOOL) = ^(BOOL isRequired) {
@@ -42,11 +47,26 @@
 
 - (void)overrideInstanceMethod:(SEL)selector withImplementation:(id)block {
     Method method = class_getInstanceMethod([self class], selector);
-    if (method == nil) {
-        return;
+    [self assertMethodExists:method];
+    if (method) {
+        IMP implementation = imp_implementationWithBlock(block);
+        class_replaceMethod([self class], selector, implementation, method_getTypeEncoding(method));
     }
-    IMP implementation = imp_implementationWithBlock(block);
-    class_replaceMethod([self class], selector, implementation, method_getTypeEncoding(method));
+}
+
+#pragma mark - Assertions
+
+- (void)assertClassNotExists:(Class)aClass {
+    NSString *description = [NSString stringWithFormat:@"Could not create %@ class, because class with such name already exists",
+                                                       NSStringFromClass(aClass)];
+    NSAssert(!aClass, description);
+}
+
+- (void)assertMethodExists:(Method)method {
+    NSString *description = [NSString stringWithFormat:@"Could not override method %@, because such method does not exist in %@ class",
+                                                       NSStringFromSelector(method_getName(method)),
+                                                       NSStringFromClass([self class])];
+    NSAssert(method, description);
 }
 
 @end
