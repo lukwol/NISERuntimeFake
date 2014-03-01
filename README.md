@@ -19,7 +19,7 @@ How does it work?
 Example:
 -
 
-    //Creating fake object - will create object of class FakeYourClass (subclass of YourClass)
+    //Creating fake object - will create object of class NISEFakeYourClass (subclass of YourClass)
     //You can make any NSObject's subclass fake (will not work with NSProxy)
     YourClass *fakeObject = [YourClass fake]; 
     
