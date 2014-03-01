@@ -5,10 +5,6 @@ What is it?
 -
 It's a helper category for tests in Objective-C.
 
-Why should I use it?
--
-Because sometimes mocking an object is just not enough :(
-
 What is does?
 -
 It makes fake objects which can have different behaviour than real objects.  
@@ -31,9 +27,10 @@ Example:
     //First argument is this object's self, rest arguments are in the same order as in the original method  
     //NOTE: You can write less arguments (or don't write at all) if you want, but you can't write more arguments than original method has   
     //WARNING: Make sure you override fake object's method. Otherwise you can override real class' method.
+    __block NSString *catchedString;
     [fakeObject overrideInstanceMethod:@selector(doSomethingWithStringAndReturnArray:) withImplementation:^NSArray *(YourClass *_self, NSString *string){
-      [_self makeCoffee];
-      return @[@"New implementation", string];
+      catchedString = string;
+      return @[@"New implementation"];
     }];
     
     //Use your fake object as you would normally use a real object
@@ -55,9 +52,10 @@ Fake class Example:
     Class fakeClass = [YourClass fakeClass];
     
     //Override instance methods for all future objects of this class
+    __block NSString *catchedString;
     [fakeClass overrideInstanceMethod:@selector(doSomethingWithStringAndReturnArray:) withImplementation:^NSArray *(YourClass *_self, NSString *string){
-      [_self makeCoffee];
-      return @[@"New implementation", string];
+      catchedString = string;
+      return @[@"New implementation"];
     }];
     
     //Create fake object with any method you want using previously created fake class
