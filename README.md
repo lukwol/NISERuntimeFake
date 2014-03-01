@@ -27,9 +27,9 @@ Example:
     //First argument is this object's self, rest arguments are in the same order as in the original method  
     //NOTE: You can write less arguments (or don't write at all) if you want, but you can't write more arguments than original method has   
     //WARNING: Make sure you override fake object's method. Otherwise you can override real class' method.
-    __block NSString *catchedString;
+    __block NSString *capturedString;
     [fakeObject overrideInstanceMethod:@selector(doSomethingWithStringAndReturnArray:) withImplementation:^NSArray *(YourClass *_self, NSString *string){
-      catchedString = string;
+      capturedString = string;
       return @[@"New implementation"];
     }];
     
@@ -52,9 +52,9 @@ Fake class Example:
     Class fakeClass = [YourClass fakeClass];
     
     //Override instance methods for all future objects of this class
-    __block NSString *catchedString;
+    __block NSString *capturedString;
     [fakeClass overrideInstanceMethod:@selector(doSomethingWithStringAndReturnArray:) withImplementation:^NSArray *(YourClass *_self, NSString *string){
-      catchedString = string;
+      capturedString = string;
       return @[@"New implementation"];
     }];
     
