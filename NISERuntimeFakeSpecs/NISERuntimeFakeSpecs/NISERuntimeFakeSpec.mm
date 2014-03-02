@@ -24,12 +24,12 @@ describe(@"NISERuntimeFake", ^{
             fake = [NSObject fake];
         });
 
-        it(@"should create FakeNSObject class object", ^{
-            NSStringFromClass([fake class]) should equal(@"FakeNSObject");
+        it(@"should create NISEFakeNSObject class object", ^{
+            NSStringFromClass([fake class]) should equal(@"NISEFakeNSObject");
         });
 
         it(@"should not register created fake class", ^{
-            Class expectedClass = NSClassFromString(@"FakeNSObject");
+            Class expectedClass = NSClassFromString(@"NISEFakeNSObject");
             expectedClass should be_nil;
         });
 
@@ -43,32 +43,32 @@ describe(@"NISERuntimeFake", ^{
             fakeClass = [NSObject fakeClass];
         });
         
-        it(@"should create FakeNSObject class", ^{
-            NSStringFromClass(fakeClass) should equal(@"FakeNSObject");
+        it(@"should create NISEFakeNSObject class", ^{
+            NSStringFromClass(fakeClass) should equal(@"NISEFakeNSObject");
         });
         
         it(@"should not register created fake class", ^{
-            Class expectedClass = NSClassFromString(@"FakeNSObject");
+            Class expectedClass = NSClassFromString(@"NISEFakeNSObject");
             expectedClass should be_nil;
         });
         
     });
 
-    describe(@"fake delegate object creation", ^{
+    describe(@"fake object with protocol creation", ^{
 
         __block BOOL optional;
         __block NSObject <UITableViewDataSource> *fakeDelegate;
 
         subjectAction(^{
-            fakeDelegate = [NSObject fakeDelegate:@protocol(UITableViewDataSource) withOptionalMethods:optional];
+            fakeDelegate = [NSObject fakeObjectWithProtocol:@protocol(UITableViewDataSource) optionalMethods:optional];
         });
 
-        it(@"should create FakeUITableViewDelegate class object", ^{
-            NSStringFromClass([fakeDelegate class]) should equal(@"FakeUITableViewDataSource");
+        it(@"should create NISEFakeUITableViewDelegate class object", ^{
+            NSStringFromClass([fakeDelegate class]) should equal(@"NISEFakeUITableViewDataSource");
         });
 
         it(@"should not register created fake class", ^{
-            Class expectedClass = NSClassFromString(@"FakeUITableViewDataSource");
+            Class expectedClass = NSClassFromString(@"NISEFakeUITableViewDataSource");
             expectedClass should be_nil;
         });
 
