@@ -1,6 +1,6 @@
-/*
- * Copyright 2014 Taptera Inc. All rights reserved.
- */
+//
+//  Copyright (c) 2013 Lukasz Wolanczyk. All rights reserved.
+//
 
 
 #import <Foundation/Foundation.h>
@@ -8,10 +8,11 @@
 
 @protocol TestInheritingProtocol <TestBaseProtocol>
 
--(void)testInheritingRequiredMethod;
+- (void)testInheritingRequiredMethod;
 
 @optional
 
 - (void)testInheritingOptionalMethod;
 
 @end
+ 

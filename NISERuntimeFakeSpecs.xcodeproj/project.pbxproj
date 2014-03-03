@@ -14,6 +14,7 @@
 		5A7280AB181D54B7001A0BF6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5A7280A9181D54B7001A0BF6 /* InfoPlist.strings */; };
 		5A7280AD181D54B7001A0BF6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A7280AC181D54B7001A0BF6 /* main.m */; };
 		5A7280BE181D5598001A0BF6 /* NISERuntimeFakeSpec.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A7280BD181D5598001A0BF6 /* NISERuntimeFakeSpec.mm */; };
+		5AA8059418C4B3C100FBB05E /* NSObject+NISERuntimeFake.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AA8059318C4B3C100FBB05E /* NSObject+NISERuntimeFake.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,8 @@
 		5A7280AC181D54B7001A0BF6 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		5A7280AE181D54B7001A0BF6 /* NISERuntimeFakeSpecs-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NISERuntimeFakeSpecs-Prefix.pch"; sourceTree = "<group>"; };
 		5A7280BD181D5598001A0BF6 /* NISERuntimeFakeSpec.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NISERuntimeFakeSpec.mm; sourceTree = "<group>"; };
+		5AA8059218C4B3C100FBB05E /* NSObject+NISERuntimeFake.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+NISERuntimeFake.h"; sourceTree = "<group>"; };
+		5AA8059318C4B3C100FBB05E /* NSObject+NISERuntimeFake.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+NISERuntimeFake.m"; sourceTree = "<group>"; };
 		B27A92C945A6B6FBC8E2617C /* TestBaseProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestBaseProtocol.h; sourceTree = "<group>"; };
 		B27A9351C4D6554DE13F076C /* TestInheritingProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestInheritingProtocol.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -50,6 +53,7 @@
 		5A728094181D54B7001A0BF6 = {
 			isa = PBXGroup;
 			children = (
+				5AA8059118C4B3C100FBB05E /* NISERuntimeFake */,
 				5A7280A6181D54B7001A0BF6 /* NISERuntimeFakeSpecs */,
 				5A72809F181D54B7001A0BF6 /* Frameworks */,
 				5A72809E181D54B7001A0BF6 /* Products */,
@@ -95,6 +99,15 @@
 				5A7280AE181D54B7001A0BF6 /* NISERuntimeFakeSpecs-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		5AA8059118C4B3C100FBB05E /* NISERuntimeFake */ = {
+			isa = PBXGroup;
+			children = (
+				5AA8059218C4B3C100FBB05E /* NSObject+NISERuntimeFake.h */,
+				5AA8059318C4B3C100FBB05E /* NSObject+NISERuntimeFake.m */,
+			);
+			path = NISERuntimeFake;
 			sourceTree = "<group>";
 		};
 		B27A928F4E021B0A7D42F4EC /* Helpers */ = {
@@ -203,6 +216,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5AA8059418C4B3C100FBB05E /* NSObject+NISERuntimeFake.m in Sources */,
 				5A7280AD181D54B7001A0BF6 /* main.m in Sources */,
 				5A7280BE181D5598001A0BF6 /* NISERuntimeFakeSpec.mm in Sources */,
 			);
