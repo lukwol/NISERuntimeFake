@@ -1,3 +1,5 @@
 .idea
 Pods
 *.xcworkspace
+.DS_Store
+NISERuntimeFakeSpecs/NISERuntimeFakeSpecs.xcodeproj/xcuserdata

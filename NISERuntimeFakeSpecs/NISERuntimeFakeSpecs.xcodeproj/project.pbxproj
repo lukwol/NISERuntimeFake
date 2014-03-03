@@ -28,6 +28,8 @@
 		5A7280AC181D54B7001A0BF6 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		5A7280AE181D54B7001A0BF6 /* NISERuntimeFakeSpecs-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NISERuntimeFakeSpecs-Prefix.pch"; sourceTree = "<group>"; };
 		5A7280BD181D5598001A0BF6 /* NISERuntimeFakeSpec.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NISERuntimeFakeSpec.mm; sourceTree = "<group>"; };
+		B27A92C945A6B6FBC8E2617C /* TestBaseProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestBaseProtocol.h; sourceTree = "<group>"; };
+		B27A9351C4D6554DE13F076C /* TestInheritingProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestInheritingProtocol.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +81,7 @@
 			children = (
 				5A7280BD181D5598001A0BF6 /* NISERuntimeFakeSpec.mm */,
 				5A7280A7181D54B7001A0BF6 /* Supporting Files */,
+				B27A928F4E021B0A7D42F4EC /* Helpers */,
 			);
 			path = NISERuntimeFakeSpecs;
 			sourceTree = "<group>";
@@ -92,6 +95,15 @@
 				5A7280AE181D54B7001A0BF6 /* NISERuntimeFakeSpecs-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		B27A928F4E021B0A7D42F4EC /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				B27A92C945A6B6FBC8E2617C /* TestBaseProtocol.h */,
+				B27A9351C4D6554DE13F076C /* TestInheritingProtocol.h */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
