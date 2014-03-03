@@ -1,5 +1,6 @@
 #import <objc/runtime.h>
 #import "NSObject+NISERuntimeFake.h"
+#import "TestInheritingProtocol.h"
 
 using namespace Cedar::Matchers;
 using namespace Cedar::Doubles;
@@ -57,27 +58,27 @@ describe(@"NISERuntimeFake", ^{
     describe(@"fake object with protocol creation", ^{
 
         __block BOOL optional;
-        __block NSObject <UITableViewDataSource> *fakeDelegate;
+        __block NSObject <TestInheritingProtocol> *fakeDelegate;
 
         subjectAction(^{
-            fakeDelegate = [NSObject fakeObjectWithProtocol:@protocol(UITableViewDataSource) optionalMethods:optional];
+            fakeDelegate = [NSObject fakeObjectWithProtocol:@protocol(TestInheritingProtocol) optionalMethods:optional];
         });
 
-        it(@"should create NISEFakeUITableViewDelegate class object", ^{
-            NSStringFromClass([fakeDelegate class]) should equal(@"NISEFakeUITableViewDataSource");
+        it(@"should create NISEFakeTestInheritingProtocol class object", ^{
+            NSStringFromClass([fakeDelegate class]) should equal(@"NISEFakeTestInheritingProtocol");
         });
 
         it(@"should not register created fake class", ^{
-            Class expectedClass = NSClassFromString(@"NISEFakeUITableViewDataSource");
+            Class expectedClass = NSClassFromString(@"NISEFakeTestInheritingProtocol");
             expectedClass should be_nil;
         });
 
-        it(@"should conform to protocol ", ^{
-            [fakeDelegate conformsToProtocol:@protocol(UITableViewDataSource)] should be_truthy;
+        it(@"should conform to protocol", ^{
+            [fakeDelegate conformsToProtocol:@protocol(TestInheritingProtocol)] should be_truthy;
         });
 
         it(@"should implement required method", ^{
-            [fakeDelegate respondsToSelector:@selector(tableView:numberOfRowsInSection:)] should be_truthy;
+            [fakeDelegate respondsToSelector:@selector(testInheritingRequiredMethod)] should be_truthy;
         });
 
         context(@"when user choose to implement optional methods", ^{
@@ -87,7 +88,7 @@ describe(@"NISERuntimeFake", ^{
             });
 
             it(@"should implement optional method", ^{
-                [fakeDelegate respondsToSelector:@selector(numberOfSectionsInTableView:)] should be_truthy;
+                [fakeDelegate respondsToSelector:@selector(testInheritingOptionalMethod)] should be_truthy;
             });
 
         });
@@ -99,9 +100,44 @@ describe(@"NISERuntimeFake", ^{
             });
 
             it(@"should not implement optional method", ^{
-                [fakeDelegate respondsToSelector:@selector(numberOfSectionsInTableView:)] should_not be_truthy;
+                [fakeDelegate respondsToSelector:@selector(testInheritingOptionalMethod)] should_not be_truthy;
             });
 
+        });
+
+        describe(@"protocol inheritance", ^{
+
+            it(@"should conform to base protocol", ^{
+                [fakeDelegate conformsToProtocol:@protocol(TestBaseProtocol)] should be_truthy;
+            });
+
+            it(@"should implement required method", ^{
+                [fakeDelegate respondsToSelector:@selector(testBaseRequiredMethod)] should be_truthy;
+            });
+
+            context(@"when user choose to implement optional methods", ^{
+
+                beforeEach(^{
+                    optional = YES;
+                });
+
+                it(@"should implement optional method", ^{
+                    [fakeDelegate respondsToSelector:@selector(testBaseOptionalMethod)] should be_truthy;
+                });
+
+            });
+
+            context(@"when user choose not to implement optional methods", ^{
+
+                beforeEach(^{
+                    optional = NO;
+                });
+
+                it(@"should not implement optional method", ^{
+                    [fakeDelegate respondsToSelector:@selector(testBaseOptionalMethod)] should_not be_truthy;
+                });
+
+            });
         });
 
     });
