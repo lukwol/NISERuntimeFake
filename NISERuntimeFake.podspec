@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'NISERuntimeFake'
-  s.version  = '0.1.0'
+  s.version  = '0.1.1'
   s.license  = 'MIT'
   s.summary  = 'Library to make fake objects.'
   s.description = 'This library lets you create fake objects of any class at runtime, which can have different behaviour than real objects. You can define different behaviour by overriding implemented instace methods.'
