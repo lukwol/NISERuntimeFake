@@ -12,9 +12,9 @@
     return [[fakeClass alloc] init];
 }
 
-+ (id)fakeObjectWithProtocol:(Protocol *)baseProtocol {
++ (id)fakeObjectWithProtocol:(Protocol *)protocol {
     Class fakeClass = [self fakeClass];
-    [self addProtocolWithConformingProtocols:baseProtocol toClass:fakeClass];
+    [self addProtocolWithConformingProtocols:protocol toClass:fakeClass];
     return [[fakeClass alloc] init];
 }
 
