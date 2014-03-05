@@ -12,9 +12,9 @@
     return [[fakeClass alloc] init];
 }
 
-+ (id)fakeObjectWithProtocol:(Protocol *)baseProtocol includeOptionalMethods:(BOOL)optional {
++ (id)fakeObjectWithProtocol:(Protocol *)baseProtocol {
     Class fakeClass = [self fakeClass];
-    [self addProtocolWithConformingProtocols:baseProtocol toClass:fakeClass includeOptionalMethods:optional];
+    [self addProtocolWithConformingProtocols:baseProtocol toClass:fakeClass];
     return [[fakeClass alloc] init];
 }
 
@@ -37,19 +37,19 @@
     return class;
 }
 
-+ (void)addProtocolWithConformingProtocols:(Protocol *)baseProtocol toClass:(Class)class includeOptionalMethods:(BOOL)optional {
-    [self addMethodsFromProtocol:baseProtocol toClass:class includeOptionalMethods:optional];
++ (void)addProtocolWithConformingProtocols:(Protocol *)baseProtocol toClass:(Class)class {
+    [self addMethodsFromProtocol:baseProtocol toClass:class];
 
     unsigned int protocolCount;
     __unsafe_unretained Protocol **protocols = protocol_copyProtocolList(baseProtocol, &protocolCount);
 
     for (int i = 0; i < protocolCount; i++) {
         Protocol *protocol = protocols[i];
-        [self addProtocolWithConformingProtocols:protocol toClass:class includeOptionalMethods:optional];
+        [self addProtocolWithConformingProtocols:protocol toClass:class];
     }
 }
 
-+ (void)addMethodsFromProtocol:(Protocol *)protocol toClass:(Class)class includeOptionalMethods:(BOOL)optional {
++ (void)addMethodsFromProtocol:(Protocol *)protocol toClass:(Class)class {
     if (protocol == @protocol(NSObject)) {
         return;
     }
@@ -67,9 +67,7 @@
         }
     };
     enumerate(YES);
-    if (optional) {
-        enumerate(NO);
-    }
+    enumerate(NO);
 }
 
 #pragma mark - Assertions

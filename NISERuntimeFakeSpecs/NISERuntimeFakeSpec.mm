@@ -35,14 +35,13 @@ describe(@"NISERuntimeFake", ^{
         });
 
     });
-    
+
     describe(@"fake object with protocol creation", ^{
 
-        __block BOOL optional;
         __block NSObject <TestInheritingProtocol> *fakeDelegate;
 
         subjectAction(^{
-            fakeDelegate = [NSObject fakeObjectWithProtocol:@protocol(TestInheritingProtocol) includeOptionalMethods:optional];
+            fakeDelegate = [NSObject fakeObjectWithProtocol:@protocol(TestInheritingProtocol)];
         });
 
         it(@"should create NISEFakeNSObject class object", ^{
@@ -62,28 +61,8 @@ describe(@"NISERuntimeFake", ^{
             [fakeDelegate respondsToSelector:@selector(testInheritingRequiredMethod)] should be_truthy;
         });
 
-        context(@"when user choose to implement optional methods", ^{
-
-            beforeEach(^{
-                optional = YES;
-            });
-
-            it(@"should implement optional method", ^{
-                [fakeDelegate respondsToSelector:@selector(testInheritingOptionalMethod)] should be_truthy;
-            });
-
-        });
-
-        context(@"when user choose not to implement optional methods", ^{
-
-            beforeEach(^{
-                optional = NO;
-            });
-
-            it(@"should not implement optional method", ^{
-                [fakeDelegate respondsToSelector:@selector(testInheritingOptionalMethod)] should_not be_truthy;
-            });
-
+        it(@"should implement optional method", ^{
+            [fakeDelegate respondsToSelector:@selector(testInheritingOptionalMethod)] should be_truthy;
         });
 
         describe(@"protocol inheritance", ^{
@@ -96,28 +75,8 @@ describe(@"NISERuntimeFake", ^{
                 [fakeDelegate respondsToSelector:@selector(testBaseRequiredMethod)] should be_truthy;
             });
 
-            context(@"when user choose to implement optional methods", ^{
-
-                beforeEach(^{
-                    optional = YES;
-                });
-
-                it(@"should implement optional method", ^{
-                    [fakeDelegate respondsToSelector:@selector(testBaseOptionalMethod)] should be_truthy;
-                });
-
-            });
-
-            context(@"when user choose not to implement optional methods", ^{
-
-                beforeEach(^{
-                    optional = NO;
-                });
-
-                it(@"should not implement optional method", ^{
-                    [fakeDelegate respondsToSelector:@selector(testBaseOptionalMethod)] should_not be_truthy;
-                });
-
+            it(@"should implement optional method", ^{
+                [fakeDelegate respondsToSelector:@selector(testBaseOptionalMethod)] should be_truthy;
             });
         });
 
@@ -143,7 +102,7 @@ describe(@"NISERuntimeFake", ^{
             IMP implementation = method_getImplementation(method);
             implementation should_not equal(previousImplementation);
         });
-        
+
     });
 
     describe(@"capturing parameter", ^{
@@ -219,4 +178,3 @@ describe(@"NISERuntimeFake", ^{
 });
 
 SPEC_END
-
