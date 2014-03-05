@@ -1,6 +1,9 @@
 NISERuntimeFake
 =
 
+[![Version](https://cocoapod-badges.herokuapp.com/v/NISERuntimeFake/badge.png)](http://cocoadocs.org/docsets/NISERuntimeFake)
+[![Platform](http://cocoapod-badges.herokuapp.com/p/NISERuntimeFake/badge.png)](http://cocoadocs.org/docsets/NISERuntimeFake)
+
 What is it?
 -
 `NISERuntimeFake` is an `NSObject` category which creates fake objects at runtime.
