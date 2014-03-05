@@ -12,23 +12,10 @@
     return [[fakeClass alloc] init];
 }
 
-+ (Class)fakeClass {
-    
-    NSString *className = [NSString stringWithFormat:@"NISEFake%@", NSStringFromClass([self class])];
-    [self assertClassNotExists:NSClassFromString(className)];
-    
-    Class class = objc_allocateClassPair(self.class, [className cStringUsingEncoding:NSUTF8StringEncoding], 0);
-    return class;
-}
-
-+ (id)fakeObjectWithProtocol:(Protocol *)baseProtocol optionalMethods:(BOOL)optional {
-    NSString *className = [NSString stringWithFormat:@"NISEFake%@", NSStringFromProtocol(baseProtocol)];
-    [self assertClassNotExists:NSClassFromString(className)];
-    Class class = objc_allocateClassPair(self.class, [className cStringUsingEncoding:NSUTF8StringEncoding], 0);
-    
-    [self addProtocolWithConformingProtocols:baseProtocol toClass:class includeOptionalMethods:optional];
-    
-    return [[class alloc] init];
++ (id)fakeObjectWithProtocol:(Protocol *)baseProtocol includeOptionalMethods:(BOOL)optional {
+    Class fakeClass = [self fakeClass];
+    [self addProtocolWithConformingProtocols:baseProtocol toClass:fakeClass includeOptionalMethods:optional];
+    return [[fakeClass alloc] init];
 }
 
 - (void)overrideInstanceMethod:(SEL)selector withImplementation:(id)block {
@@ -42,12 +29,20 @@
 
 #pragma mark - Helpers
 
++ (Class)fakeClass {
+    NSString *className = [NSString stringWithFormat:@"NISEFake%@", NSStringFromClass([self class])];
+    [self assertClassNotExists:NSClassFromString(className)];
+
+    Class class = objc_allocateClassPair(self.class, [className cStringUsingEncoding:NSUTF8StringEncoding], 0);
+    return class;
+}
+
 + (void)addProtocolWithConformingProtocols:(Protocol *)baseProtocol toClass:(Class)class includeOptionalMethods:(BOOL)optional {
     [self addMethodsFromProtocol:baseProtocol toClass:class includeOptionalMethods:optional];
-    
+
     unsigned int protocolCount;
     __unsafe_unretained Protocol **protocols = protocol_copyProtocolList(baseProtocol, &protocolCount);
-    
+
     for (int i = 0; i < protocolCount; i++) {
         Protocol *protocol = protocols[i];
         [self addProtocolWithConformingProtocols:protocol toClass:class includeOptionalMethods:optional];
@@ -58,7 +53,7 @@
     if (protocol == @protocol(NSObject)) {
         return;
     }
-    
+
     class_addProtocol(class, protocol);
     void (^enumerate)(BOOL) = ^(BOOL isRequired) {
         unsigned int descriptionCount;
@@ -81,14 +76,14 @@
 
 - (void)assertClassNotExists:(Class)aClass {
     NSString *description = [NSString stringWithFormat:@"Could not create %@ class, because class with such name already exists",
-                             NSStringFromClass(aClass)];
+                                                       NSStringFromClass(aClass)];
     NSAssert(!aClass, description);
 }
 
 - (void)assertMethodExists:(Method)method {
     NSString *description = [NSString stringWithFormat:@"Could not override method %@, because such method does not exist in %@ class",
-                             NSStringFromSelector(method_getName(method)),
-                             NSStringFromClass([self class])];
+                                                       NSStringFromSelector(method_getName(method)),
+                                                       NSStringFromClass([self class])];
     NSAssert(method, description);
 }
 

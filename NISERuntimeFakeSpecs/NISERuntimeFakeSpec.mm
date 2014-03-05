@@ -36,40 +36,21 @@ describe(@"NISERuntimeFake", ^{
 
     });
     
-    describe(@"fake class creation", ^{
-        
-        __block Class fakeClass;
-        
-        subjectAction(^{
-            fakeClass = [NSObject fakeClass];
-        });
-        
-        it(@"should create NISEFakeNSObject class", ^{
-            NSStringFromClass(fakeClass) should equal(@"NISEFakeNSObject");
-        });
-        
-        it(@"should not register created fake class", ^{
-            Class expectedClass = NSClassFromString(@"NISEFakeNSObject");
-            expectedClass should be_nil;
-        });
-        
-    });
-
     describe(@"fake object with protocol creation", ^{
 
         __block BOOL optional;
         __block NSObject <TestInheritingProtocol> *fakeDelegate;
 
         subjectAction(^{
-            fakeDelegate = [NSObject fakeObjectWithProtocol:@protocol(TestInheritingProtocol) optionalMethods:optional];
+            fakeDelegate = [NSObject fakeObjectWithProtocol:@protocol(TestInheritingProtocol) includeOptionalMethods:optional];
         });
 
-        it(@"should create NISEFakeTestInheritingProtocol class object", ^{
-            NSStringFromClass([fakeDelegate class]) should equal(@"NISEFakeTestInheritingProtocol");
+        it(@"should create NISEFakeNSObject class object", ^{
+            NSStringFromClass([fakeDelegate class]) should equal(@"NISEFakeNSObject");
         });
 
         it(@"should not register created fake class", ^{
-            Class expectedClass = NSClassFromString(@"NISEFakeTestInheritingProtocol");
+            Class expectedClass = NSClassFromString(@"NISEFakeNSObject");
             expectedClass should be_nil;
         });
 

@@ -8,9 +8,7 @@
 
 + (id)fake;
 
-+ (Class)fakeClass;
-
-+ (id)fakeObjectWithProtocol:(Protocol *)protocol optionalMethods:(BOOL)optional;
++ (id)fakeObjectWithProtocol:(Protocol *)protocol includeOptionalMethods:(BOOL)optional;
 
 - (void)overrideInstanceMethod:(SEL)selector withImplementation:(id)block;
 
