@@ -11,7 +11,7 @@ What is it?
 What is does?
 -
 It makes fake objects which can have different behaviour than real objects.  
-You can define different behaviour by overriding implemented instace methods.
+You can define different behaviour by overriding implemented instance methods.
 
 How does it work?
 -
@@ -34,7 +34,7 @@ Example:
     //Use your fake object as you would normally use a real object
     [fakeObject doSomethingWithString:@"Whatever"];
     
-    NSLog(@"capturedString = %@", capturedString); //Output will be "Whatever"
+    NSLog(@"%@", capturedString); //Output will be "Whatever"
 
     
     //If you want to make new fake object with original implementation just create new one 
