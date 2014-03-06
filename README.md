@@ -43,5 +43,5 @@ Example:
 Fake object with protocol Example:
 -
 
-    //Create fake object with all protocol methods
-    YourClass *fakeObjectWithProtocol = [YourClass fakeObjectWithProtocol:@protocol(YourProtocol)];
+    //Create fake object with protocol methods
+    YourClass *fakeObjectWithProtocol = [YourClass fakeObjectWithProtocol:@protocol(YourProtocol includeOptionalMethods:YES)];
