@@ -33,15 +33,15 @@ describe(@"NISERuntimeFake", ^{
             Class expectedClass = NSClassFromString(@"NISEFakeNSObject");
             expectedClass should be_nil;
         });
-
     });
 
     describe(@"fake object with protocol creation", ^{
 
         __block NSObject <TestInheritingProtocol> *fakeDelegate;
+        __block BOOL optional;
 
         subjectAction(^{
-            fakeDelegate = [NSObject fakeObjectWithProtocol:@protocol(TestInheritingProtocol)];
+            fakeDelegate = [NSObject fakeObjectWithProtocol:@protocol(TestInheritingProtocol) includeOptionalMethods:optional];
         });
 
         it(@"should create NISEFakeNSObject class object", ^{
@@ -61,8 +61,26 @@ describe(@"NISERuntimeFake", ^{
             [fakeDelegate respondsToSelector:@selector(testInheritingRequiredMethod)] should be_truthy;
         });
 
-        it(@"should implement optional method", ^{
-            [fakeDelegate respondsToSelector:@selector(testInheritingOptionalMethod)] should be_truthy;
+        context(@"when user choose to implement optional methods", ^{
+
+            beforeEach(^{
+                optional = YES;
+            });
+
+            it(@"should implement optional method", ^{
+                [fakeDelegate respondsToSelector:@selector(testInheritingOptionalMethod)] should be_truthy;
+            });
+        });
+
+        context(@"when user choose not to implement optional methods", ^{
+
+            beforeEach(^{
+                optional = NO;
+            });
+
+            it(@"should not implement optional method", ^{
+                [fakeDelegate respondsToSelector:@selector(testInheritingOptionalMethod)] should_not be_truthy;
+            });
         });
 
         describe(@"protocol inheritance", ^{
@@ -75,11 +93,28 @@ describe(@"NISERuntimeFake", ^{
                 [fakeDelegate respondsToSelector:@selector(testBaseRequiredMethod)] should be_truthy;
             });
 
-            it(@"should implement optional method", ^{
-                [fakeDelegate respondsToSelector:@selector(testBaseOptionalMethod)] should be_truthy;
+            context(@"when user choose to implement optional methods", ^{
+
+                beforeEach(^{
+                    optional = YES;
+                });
+
+                it(@"should implement optional method", ^{
+                    [fakeDelegate respondsToSelector:@selector(testBaseOptionalMethod)] should be_truthy;
+                });
+            });
+
+            context(@"when user choose not to implement optional methods", ^{
+
+                beforeEach(^{
+                    optional = NO;
+                });
+
+                it(@"should not implement optional method", ^{
+                    [fakeDelegate respondsToSelector:@selector(testBaseOptionalMethod)] should_not be_truthy;
+                });
             });
         });
-
     });
 
     describe(@"overriding instance method", ^{
@@ -102,7 +137,6 @@ describe(@"NISERuntimeFake", ^{
             IMP implementation = method_getImplementation(method);
             implementation should_not equal(previousImplementation);
         });
-
     });
 
     describe(@"capturing parameter", ^{
@@ -150,7 +184,6 @@ describe(@"NISERuntimeFake", ^{
         it(@"should get initial url", ^{
             capturedURL should equal(initialURL);
         });
-
     });
 
     describe(@"returning different value", ^{
@@ -172,9 +205,7 @@ describe(@"NISERuntimeFake", ^{
         it(@"should return 42", ^{
             count should equal(42);
         });
-
     });
-
 });
 
 SPEC_END

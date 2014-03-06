@@ -22,14 +22,14 @@
 + (id)fake;
 
 /**
- Creates not registered subclass of any class inheriting from NSObject implementing all methods from selected protocol and creates fake object of this class with default initializer.
+ Creates not registered subclass of any class inheriting from NSObject implementing methods from selected protocol and creates fake object of this class with default initializer.
 
  @param protocol The protocol, which methods will be implemented.
+ @param optional Switch specifying if fake needs to implement optional methods.
 
  @return A new fake object with implemented protocol methods.
  */
-+ (id)fakeObjectWithProtocol:(Protocol *)protocol;
-
++ (id)fakeObjectWithProtocol:(Protocol *)protocol includeOptionalMethods:(BOOL)optional;
 ///-------------------------------
 /// @name Overriding Instance Methods
 ///-------------------------------
