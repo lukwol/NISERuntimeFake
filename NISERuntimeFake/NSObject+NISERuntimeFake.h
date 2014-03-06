@@ -40,7 +40,7 @@
  @param selector The method selector, which implementation we want to override.
  @param block Block which will be executed when overridden method will be called.
 
- @warning It is recommended to call this method only on fake objects
+ @warning This method should be called only on fake objects
  @warning First block argument will always be fake object's future self, other arguments will be in the same order as in the method.
  */
 - (void)overrideInstanceMethod:(SEL)selector withImplementation:(id)block;

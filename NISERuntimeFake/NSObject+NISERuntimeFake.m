@@ -20,6 +20,7 @@
 
 - (void)overrideInstanceMethod:(SEL)selector withImplementation:(id)block {
     Method method = class_getInstanceMethod([self class], selector);
+    [self assertClassIsFake:method];
     [self assertMethodExists:method];
     if (method) {
         IMP implementation = imp_implementationWithBlock(block);
@@ -78,6 +79,15 @@
     NSString *description = [NSString stringWithFormat:@"Could not create %@ class, because class with such name already exists",
                                                        NSStringFromClass(aClass)];
     NSAssert(!aClass, description);
+}
+
+- (void)assertClassIsFake:(Method)method {
+    Class aClass = [self class];
+    NSString *description = [NSString stringWithFormat:@"Could not override method %@, because %@ is not a fake class",
+                                                       NSStringFromSelector(method_getName(method)),
+                                                       NSStringFromClass(aClass)];
+    NSAssert([NSStringFromClass(aClass) hasPrefix:@"NISEFake"], description);
+    NSAssert(!NSClassFromString(NSStringFromClass(aClass)), description);
 }
 
 - (void)assertMethodExists:(Method)method {
