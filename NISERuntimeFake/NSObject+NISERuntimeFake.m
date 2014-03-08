@@ -7,6 +7,14 @@
 
 @implementation NSObject (NISERuntimeFake)
 
++ (Class)fakeClass {
+    NSString *className = [NSString stringWithFormat:@"NISEFake%@", NSStringFromClass([self class])];
+    [self assertClassNotExists:NSClassFromString(className)];
+
+    Class class = objc_allocateClassPair(self.class, [className cStringUsingEncoding:NSUTF8StringEncoding], 0);
+    return class;
+}
+
 + (id)fake {
     Class fakeClass = [self fakeClass];
     return [[fakeClass alloc] init];
@@ -29,14 +37,6 @@
 }
 
 #pragma mark - Helpers
-
-+ (Class)fakeClass {
-    NSString *className = [NSString stringWithFormat:@"NISEFake%@", NSStringFromClass([self class])];
-    [self assertClassNotExists:NSClassFromString(className)];
-
-    Class class = objc_allocateClassPair(self.class, [className cStringUsingEncoding:NSUTF8StringEncoding], 0);
-    return class;
-}
 
 + (void)addProtocolWithConformingProtocols:(Protocol *)baseProtocol toClass:(Class)class includeOptionalMethods:(BOOL)optional {
     [self addMethodsFromProtocol:baseProtocol toClass:class includeOptionalMethods:optional];

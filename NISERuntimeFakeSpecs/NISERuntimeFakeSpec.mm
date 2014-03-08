@@ -33,6 +33,10 @@ describe(@"NISERuntimeFake", ^{
             Class expectedClass = NSClassFromString(@"NISEFakeNSObject");
             expectedClass should be_nil;
         });
+
+        it(@"should be subclass of NSObject", ^{
+            fake should be_instance_of(NSObject.class).or_any_subclass();
+        });
     });
 
     describe(@"fake object with protocol creation", ^{

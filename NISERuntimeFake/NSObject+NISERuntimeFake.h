@@ -15,6 +15,14 @@
 ///-------------------------------
 
 /**
+ Creates not registered subclass of any class inheriting from NSObject.
+ Use this method if you want to create fake object with custom initializer.
+
+ @return A new fake class.
+ */
++ (Class)fakeClass;
+
+/**
  Creates not registered subclass of any class inheriting from NSObject and creates fake object of this class with default initializer.
 
  @return A new fake object.
@@ -30,6 +38,7 @@
  @return A new fake object with implemented protocol methods.
  */
 + (id)fakeObjectWithProtocol:(Protocol *)protocol includeOptionalMethods:(BOOL)optional;
+
 ///-------------------------------
 /// @name Overriding Instance Methods
 ///-------------------------------
