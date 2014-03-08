@@ -40,8 +40,18 @@ Example:
     //If you want to make new fake object with original implementation just create new one 
     fakeObject = [YourClass fake];
     
-Fake object with protocol Example:
+Fake object with protocol example:
 -
 
     //Create fake object with protocol methods
     YourClass *fakeObjectWithProtocol = [YourClass fakeObjectWithProtocol:@protocol(YourProtocol) includeOptionalMethods:YES];
+    
+Fake class example:
+-
+
+    //Create fake class
+    Class *fakeClass = [YourClass fakeClass];
+    
+    //Create fake object with cusotm initializer
+    YourClass *fakeObject = [[fakeYourClass alloc] initWithWhatever:whatever];
+
