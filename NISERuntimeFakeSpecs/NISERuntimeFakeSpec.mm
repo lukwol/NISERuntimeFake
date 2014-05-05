@@ -1,6 +1,8 @@
 #import <objc/runtime.h>
 #import "NSObject+NISERuntimeFake.h"
 #import "TestInheritingProtocol.h"
+#import "TestBaseClass.h"
+#import "TestInheritingClass.h"
 
 using namespace Cedar::Matchers;
 using namespace Cedar::Doubles;
@@ -9,60 +11,136 @@ SPEC_BEGIN(NISERuntimeFakeSpec)
 
 describe(@"NISERuntimeFake", ^{
 
-    __block NSObject *fake;
+    __block TestBaseClass *fake;
 
     beforeEach(^{
-        fake = [NSObject fake];
+        fake = [TestBaseClass fake];
     });
 
     afterEach(^{
         fake = nil;
     });
 
-    describe(@"fake object creation", ^{
+    sharedExamplesFor(@"fake object", ^(NSDictionary *dictionary) {
+        describe(@"fake object creation", ^{
+
+            it(@"should create NISEFakeTestBaseClass class object", ^{
+                NSStringFromClass([fake class]) should equal(@"NISEFakeTestBaseClass");
+            });
+
+            it(@"should not register created fake class", ^{
+                Class expectedClass = NSClassFromString(@"NISEFakeTestBaseClass");
+                expectedClass should be_nil;
+            });
+
+            it(@"should have TestBaseClass as superclass", ^{
+                [fake superclass] should equal([TestBaseClass class]);
+            });
+
+            it(@"should be kind of TestBaseClass", ^{
+                [fake isKindOfClass:[TestBaseClass class]] should be_truthy;
+            });
+
+            it(@"should respond to selector for methods from faked class", ^{
+                [fake respondsToSelector:@selector(doSomething)] should be_truthy;
+            });
+
+            it(@"should have implementation for methods from faked class", ^{
+                [fake doSomething] should equal(@"Old implementation");
+                [fake exampleStringProperty] should equal(@"Testing method implementation");
+            });
+
+            it(@"should have property from faked class", ^{
+                fake.exampleStringProperty = @"Testing property";
+                fake.exampleStringProperty should equal(@"Testing property");
+            });
+        });
+    });
+
+    itShouldBehaveLike(@"fake object");
+
+    describe(@"class inheritance", ^{
+
+        __block TestInheritingClass *fake;
 
         subjectAction(^{
-            fake = [NSObject fake];
+            fake = [TestInheritingClass fake];
         });
 
-        it(@"should create NISEFakeNSObject class object", ^{
-            NSStringFromClass([fake class]) should equal(@"NISEFakeNSObject");
+        it(@"should be NISEFakeTestInheritingClass class object", ^{
+            NSStringFromClass([fake class]) should equal(@"NISEFakeTestInheritingClass");
         });
 
         it(@"should not register created fake class", ^{
-            Class expectedClass = NSClassFromString(@"NISEFakeNSObject");
+            Class expectedClass = NSClassFromString(@"NISEFakeTestInheritingClass");
             expectedClass should be_nil;
         });
 
-        it(@"should be subclass of NSObject", ^{
-            fake should be_instance_of(NSObject.class).or_any_subclass();
+        it(@"should have TestInheritingClass as superclass", ^{
+            [fake superclass] should equal([TestInheritingClass class]);
+        });
+
+        it(@"should be kind of TestInheritingClass", ^{
+            [fake isKindOfClass:[TestInheritingClass class]] should be_truthy;
+        });
+
+        it(@"should be kind of TestBaseClass", ^{
+            [fake isKindOfClass:[TestBaseClass class]] should be_truthy;
+        });
+
+        it(@"should respond to selector for methods from faked class", ^{
+            [fake respondsToSelector:@selector(doSomethingInInheritingClass)] should be_truthy;
+        });
+
+        it(@"should respond to selector for methods from faked super class", ^{
+            [fake respondsToSelector:@selector(doSomething)] should be_truthy;
+        });
+
+        it(@"should have implementation for methods from faked super class", ^{
+            [fake doSomething] should equal(@"Old implementation");
+            [fake exampleStringProperty] should equal(@"Testing method implementation");
+        });
+
+        it(@"should have property from faked super class", ^{
+            fake.exampleStringProperty = @"Testing property";
+            fake.exampleStringProperty should equal(@"Testing property");
         });
     });
 
     describe(@"fake object with protocol creation", ^{
 
-        __block NSObject <TestInheritingProtocol> *fakeDelegate;
+        __block TestBaseClass <TestInheritingProtocol> *fake;
         __block BOOL optional;
 
         subjectAction(^{
-            fakeDelegate = [NSObject fakeObjectWithProtocol:@protocol(TestInheritingProtocol) includeOptionalMethods:optional];
+            fake = [TestBaseClass fakeObjectWithProtocol:@protocol(TestInheritingProtocol) includeOptionalMethods:optional];
         });
 
-        it(@"should create NISEFakeNSObject class object", ^{
-            NSStringFromClass([fakeDelegate class]) should equal(@"NISEFakeNSObject");
+        itShouldBehaveLike(@"fake object");
+
+        it(@"should create NISEFakeTestBaseClass class object", ^{
+            NSStringFromClass([fake class]) should equal(@"NISEFakeTestBaseClass");
         });
 
         it(@"should not register created fake class", ^{
-            Class expectedClass = NSClassFromString(@"NISEFakeNSObject");
+            Class expectedClass = NSClassFromString(@"NISEFakeTestBaseClass");
             expectedClass should be_nil;
         });
 
-        it(@"should conform to protocol", ^{
-            [fakeDelegate conformsToProtocol:@protocol(TestInheritingProtocol)] should be_truthy;
+        it(@"should conform to base protocol", ^{
+            [fake conformsToProtocol:@protocol(TestBaseProtocol)] should be_truthy;
+        });
+
+        it(@"should conform to inheriting protocol", ^{
+            [fake conformsToProtocol:@protocol(TestInheritingProtocol)] should be_truthy;
+        });
+
+        it(@"should not conform to other protocols", ^{
+            [fake conformsToProtocol:@protocol(UITableViewDelegate)] should be_falsy;
         });
 
         it(@"should implement required method", ^{
-            [fakeDelegate respondsToSelector:@selector(testInheritingRequiredMethod)] should be_truthy;
+            [fake respondsToSelector:@selector(testInheritingRequiredMethod)] should be_truthy;
         });
 
         context(@"when user choose to implement optional methods", ^{
@@ -72,9 +150,10 @@ describe(@"NISERuntimeFake", ^{
             });
 
             it(@"should implement optional method", ^{
-                [fakeDelegate respondsToSelector:@selector(testInheritingOptionalMethod)] should be_truthy;
+                [fake respondsToSelector:@selector(testInheritingOptionalMethod)] should be_truthy;
             });
         });
+
 
         context(@"when user choose not to implement optional methods", ^{
 
@@ -83,18 +162,18 @@ describe(@"NISERuntimeFake", ^{
             });
 
             it(@"should not implement optional method", ^{
-                [fakeDelegate respondsToSelector:@selector(testInheritingOptionalMethod)] should_not be_truthy;
+                [fake respondsToSelector:@selector(testInheritingOptionalMethod)] should_not be_truthy;
             });
         });
 
         describe(@"protocol inheritance", ^{
 
             it(@"should conform to base protocol", ^{
-                [fakeDelegate conformsToProtocol:@protocol(TestBaseProtocol)] should be_truthy;
+                [fake conformsToProtocol:@protocol(TestBaseProtocol)] should be_truthy;
             });
 
             it(@"should implement required method", ^{
-                [fakeDelegate respondsToSelector:@selector(testBaseRequiredMethod)] should be_truthy;
+                [fake respondsToSelector:@selector(testBaseRequiredMethod)] should be_truthy;
             });
 
             context(@"when user choose to implement optional methods", ^{
@@ -104,7 +183,7 @@ describe(@"NISERuntimeFake", ^{
                 });
 
                 it(@"should implement optional method", ^{
-                    [fakeDelegate respondsToSelector:@selector(testBaseOptionalMethod)] should be_truthy;
+                    [fake respondsToSelector:@selector(testBaseOptionalMethod)] should be_truthy;
                 });
             });
 
@@ -115,7 +194,7 @@ describe(@"NISERuntimeFake", ^{
                 });
 
                 it(@"should not implement optional method", ^{
-                    [fakeDelegate respondsToSelector:@selector(testBaseOptionalMethod)] should_not be_truthy;
+                    [fake respondsToSelector:@selector(testBaseOptionalMethod)] should_not be_truthy;
                 });
             });
         });
@@ -127,11 +206,11 @@ describe(@"NISERuntimeFake", ^{
 
         beforeEach(^{
             Method method = class_getInstanceMethod([fake class], @selector(mutableCopy));
-            previousImplementation =  method_getImplementation(method);
+            previousImplementation = method_getImplementation(method);
         });
 
         subjectAction(^{
-            [fake overrideInstanceMethod:@selector(mutableCopy) withImplementation:^id(NSObject *_self){
+            [fake overrideInstanceMethod:@selector(mutableCopy) withImplementation:^id(NSObject *_self) {
                 return nil;
             }];
         });
@@ -168,25 +247,26 @@ describe(@"NISERuntimeFake", ^{
 
     describe(@"capturing property", ^{
 
-        __block NSURL *capturedURL;
-        __block NSURL *initialURL;
-        __block Class fakeClass;
+        __block NSString *capturedPath;
+        __block NSFileManager *fakeFileManager;
 
         beforeEach(^{
-            fakeClass = [[NSURLConnection fake] class];
+            fakeFileManager = [NSFileManager fake];
         });
 
         subjectAction(^{
-            [fakeClass overrideInstanceMethod:@selector(start) withImplementation:^void(NSURLConnection *_self) {
-                capturedURL = [[_self currentRequest] URL];
-            }];
-            initialURL = [[NSURL alloc] initWithString:@"http://FixtureURL.com"];
-            NSURLRequest *URLRequest = [NSURLRequest requestWithURL:initialURL];
-            [[fakeClass alloc] initWithRequest:URLRequest delegate:nil];
+            [fakeFileManager overrideInstanceMethod:@selector(removeItemAtPath:error:)
+                                 withImplementation:^BOOL(NSFileManager *_self,
+                                         NSString *path,
+                                         NSError **error) {
+                                     capturedPath = path;
+                                     return YES;
+                                 }];
+            [fakeFileManager removeItemAtPath:@"fixture file path" error:nil];
         });
 
-        it(@"should get initial url", ^{
-            capturedURL should equal(initialURL);
+        it(@"should capture removed file's path", ^{
+            capturedPath should equal(@"fixture file path");
         });
     });
 
@@ -200,7 +280,7 @@ describe(@"NISERuntimeFake", ^{
         });
 
         subjectAction(^{
-            [fakeArray overrideInstanceMethod:@selector(count) withImplementation:^NSUInteger(NSArray *_self){
+            [fakeArray overrideInstanceMethod:@selector(count) withImplementation:^NSUInteger(NSArray *_self) {
                 return 42;
             }];
             count = [fakeArray count];
@@ -210,6 +290,6 @@ describe(@"NISERuntimeFake", ^{
             count should equal(42);
         });
     });
-});
 
+});
 SPEC_END

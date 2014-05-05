@@ -45,13 +45,3 @@ Fake object with protocol example:
 
     //Create fake object with protocol methods
     YourClass *fakeObjectWithProtocol = [YourClass fakeObjectWithProtocol:@protocol(YourProtocol) includeOptionalMethods:YES];
-    
-Fake class example:
--
-
-    //Create fake class
-    Class *fakeClass = [YourClass fakeClass];
-    
-    //Create fake object with cusotm initializer
-    YourClass *fakeObject = [[fakeYourClass alloc] initWithWhatever:whatever];
-
